@@ -1,0 +1,32 @@
+name: Build single-file HTML
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build both pages
+        run: |
+          python build_singlefile.py index.html -o Hype-single.html
+          python build_singlefile.py unblock/index.html -o Hype-unblock-single.html
+
+      - name: Upload the HTML files
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hype-single-file-html
+          path: |
+            Hype-single.html
+            Hype-unblock-single.html
